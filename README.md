@@ -1,6 +1,6 @@
-# API REST con Flask, JWT, test unitarios y Logs
+# API REST con Flask, JWT y Logs
 
-Implementación de una API REST modular usando Flask, autenticación JWT, sistema de logs, test unitarios y variables de entorno.
+Implementación de una API REST modular usando Flask, con autenticación JWT, sistema de logs y variables de entorno. Incluye containerización con Docker para despliegue simplificado.
 
 ## Características Principales
 
@@ -10,6 +10,7 @@ Implementación de una API REST modular usando Flask, autenticación JWT, sistem
 - 🔐 Gestión segura de configuración (.env)
 - 🗃️ Conexión a MySQL
 - ✅ Tests unitarios
+- 🐳 Containerización con Docker
 
 ## Arquitectura y Patrones
 
@@ -104,6 +105,7 @@ app.register_blueprint(LanguageRoutes.main, url_prefix='/languages')
 - MySQL/MariaDB
 - PyJWT 2.7.0
 - python-decouple 3.8
+- Gunicorn 20.1.0
 
 ### Instalación
 ```bash
@@ -124,12 +126,54 @@ python index.py
 mysql -u usuario -p flask_jwt_logs < scripts/flask_jwt_log_backup.sql
 ```
 
-## Testing
+## Dockerización 🐳
 
-### Ejecutar Tests
+### Características Docker
+- 🚀 Imagen base ligera: python:3.13-slim
+- 📦 Multistage building para optimización
+- ⚙️ Configuración via variables de entorno
+- 🌐 Gunicorn como servidor WSGI de producción
+- 🔌 Exposición del puerto 5000
+
+### Construcción de la Imagen
 ```bash
-pytest src/tests/
+# Construir imagen
+docker build -t flask-api:latest .
+
+# Construir sin caché (desarrollo)
+docker build --no-cache --force-rm -t flask-api:latest .
 ```
+
+### Variables de Entorno en Docker
+```bash
+# Variables requeridas para el contenedor
+SECRET_KEY=tu_clave_secreta
+MYSQL_HOST=host.docker.internal  # Conexión a MySQL local
+MYSQL_USER=usuario_db
+MYSQL_PASSWORD=password_db
+MYSQL_DB=flask_jwt_logs
+JWT_KEY=tu_clave_jwt
+```
+
+### Ejecución del Contenedor
+```powershell
+docker run `
+  --env SECRET_KEY='B!3w6*NAt2T^%kvhUI*S^_' `
+  --env MYSQL_HOST='host.docker.internal' `
+  --env MYSQL_USER='root' `
+  --env MYSQL_PASSWORD='' `
+  --env MYSQL_DB='flask_jwt_logs' `
+  --env JWT_KEY='D8*F?_1?-d$f*5' `
+  -p 5000:5000 -d --name flask-api flask-api:latest
+```
+
+### Características de Producción
+- ⚡ 4 workers de Gunicorn para mejor rendimiento
+- 📝 Logs de aplicación persistentes que se ven desde docker en files app/src/utils/log
+- 🧹 Ignorar archivos innecesarios (.dockerignore)
+- 🔄 Manejo de señales para graceful shutdown
+- 🔒 Conexión segura a MySQL
+
 
 ### Cobertura
 - ✅ Tests unitarios de servicios
@@ -145,15 +189,15 @@ POST /auth/login
 Content-Type: application/json
 
 {
-    "username": "admin",
-    "password": "admin123"
+    "username": "lordMiguel",
+    "password": "Migusprime"
 }
 ```
 
 ### Endpoint Protegido
 ```http
 GET /languages
-Authorization: Bearer eyJhbGciOiJIUzI1...
+Authorization: Bearer (el jwt q devuelve el route auth)
 ```
 
 ## Licencia
