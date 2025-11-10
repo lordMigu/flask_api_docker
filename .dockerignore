@@ -1,0 +1,27 @@
+# Archivos propios de Docker/Git
+
+Dockerfile
+.dockerignore
+.git
+.gitignore
+
+# Ignorar carpetas de caché y compilación de Python
+
+**/__pycache__
+*.pyc
+src/tests
+
+# Logs
+*.log
+
+# Python
+__pycache__/
+*.pyc
+
+# Testing and examples
+tests/
+examples/
+
+# virtualenv
+venv/
+.env
