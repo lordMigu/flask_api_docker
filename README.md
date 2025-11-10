@@ -1,6 +1,6 @@
-# API REST con Flask, JWT y Logs
+# API REST con Flask, JWT, test unitarios y Logs
 
-Implementación de una API REST modular usando Flask, con autenticación JWT, sistema de logs y variables de entorno.
+Implementación de una API REST modular usando Flask, autenticación JWT, sistema de logs, test unitarios y variables de entorno.
 
 ## Características Principales
 
@@ -158,4 +158,3 @@ Authorization: Bearer eyJhbGciOiJIUzI1...
 
 ## Licencia
 Distribuido bajo la Licencia MIT. Ver `LICENSE` para más información.
-
